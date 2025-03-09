@@ -2,6 +2,26 @@ if SERVER then
     util.AddNetworkString("hr_reload_confirm")
     util.AddNetworkString("hr_reload_execute")
 
+    local function deleteCacheFolder(path)
+        -- Ensure the path ends with a slash
+        if not string.EndsWith(path, "/") then
+            path = path .. "/"
+        end
+
+        -- Get a list of all files and directories in the specified path
+        local files, directories = file.Find(path .. "*", "GAME")
+
+        -- Recursively delete all files
+        for _, filename in ipairs(files) do
+            file.Delete(path .. filename)
+        end
+
+        -- Recursively delete all directories
+        for _, dirName in ipairs(directories) do
+            deleteCacheFolder(path .. dirName)
+        end
+    end
+
     concommand.Add("hr_reload", function(ply, cmd, args)
         -- Only allow admins to use this command
         if IsValid(ply) and not ply:IsAdmin() then
@@ -23,19 +43,12 @@ if SERVER then
         if IsValid(ply) and not ply:IsAdmin() then return end
 
         -- Attempt to delete the cache folder
-        local success, err = pcall(function()
-            if system.IsWindows() then
-                -- Windows command to delete the cache folder recursively
-                os.execute('rd /s /q "garrysmod\\cache"')
-            else -- YEP, MULTIPLATFORM BLYAT!
-                -- Unix command to delete the cache folder recursively
-                os.execute('rm -rf garrysmod/cache')
-            end
-        end)
-        if success then
+        local cachePath = "cache/"
+        if file.Exists(cachePath, "GAME") then
+            deleteCacheFolder(cachePath)
             print("Cache folder deleted successfully.")
         else
-            print("Error deleting cache folder: " .. tostring(err))
+            print("Cache folder does not exist.")
         end
 
         -- Reload the current map (which forces addons to reload)
@@ -76,4 +89,3 @@ else -- CLIENT
         end
     end)
 end
-
