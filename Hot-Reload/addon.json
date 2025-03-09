@@ -1,0 +1,18 @@
+{
+    "title": "Ametero'z Hot-Reload",
+    "type": "tool",
+    "version": "3.1 GH",
+    "author": "Ametero",
+    "description": "Helpful?",
+    "tags": ["fun"],
+    "ignore": [
+        "*.git*",
+        "*.svn*",
+        "*.DS_Store"
+    ],
+    "include": [
+        "lua/autorun/hr_reload.lua",
+        "addon.txt"
+    ]
+}
+
