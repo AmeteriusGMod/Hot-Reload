@@ -1,8 +1,3 @@
--- hr_reload addon for Garry's Mod
--- This addon shows a confirmation dialog that warns the user that the Lua addons cache will be deleted.
--- Upon confirmation, it deletes the "garrysmod/cache" folder and reloads the current map.
--- Only admin players can execute this command.
-
 if SERVER then
     util.AddNetworkString("hr_reload_confirm")
     util.AddNetworkString("hr_reload_execute")
@@ -32,7 +27,7 @@ if SERVER then
             if system.IsWindows() then
                 -- Windows command to delete the cache folder recursively
                 os.execute('rd /s /q "garrysmod\\cache"')
-            else
+            else -- YEP, MULTIPLATFORM BLYAT!
                 -- Unix command to delete the cache folder recursively
                 os.execute('rm -rf garrysmod/cache')
             end
